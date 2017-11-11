@@ -43,7 +43,7 @@ function parseUser(res) {
 
 
 function display(user) {
-    var divLogin = document.getElementById('login');
+    var divLogin = document.getElementById('authenticate');
     divLogin.className = 'off'
     var divLogout = document.getElementById('logout');
     var classContent = divLogout.className;

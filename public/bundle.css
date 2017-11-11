@@ -16,6 +16,12 @@ body {
 	width: 100%;
 }
 
-.off{
+.off {
 	display: none;
+}
+
+.title {
+	position: absolute;
+	margin-left: 50px;
+	margin-top: 5px;
 }
