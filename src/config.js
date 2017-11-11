@@ -10,5 +10,10 @@ module.exports = {
 	accessToken: 'pk.eyJ1Ijoib3NtcGVydSIsImEiOiJjajEzcGp4ZGIwMXZlMnFsam9neWsxbTZuIn0.SLaQDD84yMuzjCp7YXTSog',
 	style: 'mapbox://styles/mapbox/streets-v9',
 	gist: 'https://gist.githubusercontent.com/Rub21/29483b13401f70a66ce0e9a2cacd8ea7/raw/684a01d2defcfc84e3067e3f89023411f7df704b/grid-peru-schools.geojson',
-	layerId: 'school'
+	layerId: 'school',
+	osmAuth: {
+		oauth_consumer_key: '7tdO9K1lqrYdWfgYQCL8yGxmo2NKPbXZhIURCiZk',
+		oauth_secret: '4SCVioq68iyaGueWNOleaCYPIfRvdGoQWe4cnPZF',
+		auto: true
+	}
 }

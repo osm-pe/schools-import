@@ -1,16 +1,26 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset='utf-8' />
-    <title>OSM tasking import</title>
-    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.css' rel='stylesheet' />
-
-</head>
-<body>
-	<div id="map"></div>
-	<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-</body>
+	<head>
+		<meta charset='utf-8' />
+		<title>OSM tasking import</title>
+		<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+		<link href='//mapbox.com/base/latest/base.css' rel='stylesheet' />
+		<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.js'></script>
+		<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.css' rel='stylesheet' />
+	</head>
+	<body>
+		<div class='header fill-blue dark clearfix'>
+			<div class='margin0 col4 fill-blue dark'><h2>OSM tasking import</h2></div>
+			<div id ="login" class='margin0 col4 fill-blue dark'>
+				<a href='#' id="authenticate" class='button loud margin0'>login in OSM</a>
+			</div>
+			<div id ="logout" class='margin0 col4 fill-blue dark off'>
+				<h5 id ="user"></h5>
+				<a href='#' id="authenticate" class='button loud margin0'>logout</a>
+			</div>
+		</div>
+		<div id="map"></div>
+		<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	</body>
 </html>

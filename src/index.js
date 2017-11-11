@@ -1,5 +1,11 @@
 var config = require('./config')
+var login = require('./login')
+var user = null;
+login(function(u) {
+    user = u;
+});
 module.exports = function() {
+
     var gridData = null;
     firebase.initializeApp(config.fconfig);
     mapboxgl.accessToken = config.accessToken;
@@ -11,12 +17,15 @@ module.exports = function() {
     });
 
     map.on('click', config.layerId, function(e) {
+        var html = '<li id="start"><a href="#">Start Mapping in JOSM</a></li><li id="done"><a href="#">Mark task as done</a></li>';
+        if (!user) {
+            html = '<h5>Authenticate</h5>'
+        }
         new mapboxgl.Popup()
             .setLngLat(e.lngLat)
-            .setHTML('<li id="start"><a href="#">Start Mapping in JOSM</a></li><li id="done"><a href="#">Mark task as done</a></li>')
+            .setHTML(html)
             .addTo(map)
         $('#start').on('click', function(event) {
-
             downloadJOSM(e.features[0])
             save('progress', e.features[0])
         });
@@ -28,6 +37,7 @@ module.exports = function() {
     function downloadJOSM(id) {
         $.getJSON('http://localhost:8111/import?new_layer=true&url=https://s3.amazonaws.com/tofix/aa.osm');
     }
+
     function save(type, obj) {
         firebase.database().ref(config.layerId + '/' + obj.properties.idgrid).set({
             status: type

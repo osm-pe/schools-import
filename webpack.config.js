@@ -22,10 +22,10 @@ module.exports = {
     }]
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      include: /\.min\.js$/,
-      minimize: true
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   include: /\.min\.js$/,
+    //   minimize: true
+    // }),
     new HtmlWebpackPlugin({
       template: '!!ejs-compiled-loader!src/views/index.ejs'
     }),
