@@ -12,8 +12,8 @@ module.exports = function() {
     var map = new mapboxgl.Map({
         container: 'map',
         style: config.style,
-        zoom: 12,
-        center: [-71.97722138410576, -13.517379300798098]
+        zoom: 5,
+        center: [-75.927, -8.744]
     });
 
     map.on('click', config.layerId, function(e) {
@@ -118,7 +118,7 @@ module.exports = function() {
                             ['validate', '#2de561']
                         ]
                     },
-                    'fill-opacity': 0.3
+                    'fill-opacity': 0.4
                 }
             });
             map.addLayer({
