@@ -18,14 +18,18 @@ module.exports = function() {
 
     map.on('click', config.layerId, function(e) {
         var html = "<div class='pill'> <a id='progress' href='#' class='col12 button'>Start Mapping in JOSM</a>";
-        if (e.features[0].properties.status === 'progress') {
-            html = "<a id='done' href='#' class='col12 button'>Mark task as done</a>";
+
+        if (e.features[0].properties.status === 'progress' && user.display_name == e.features[0].properties.user) {
+            html = "<a id='done' href='#' class='col12 button'>Mark task as done</a><a id='download' href='#' class='col12 button'>Download in JOSM</a>";
+        }
+        if (e.features[0].properties.status === 'progress' && user.display_name !== e.features[0].properties.user) {
+            html = "<div>The block was taken  by " + e.features[0].properties.user + "</div>";
         }
         if (e.features[0].properties.status === 'done') {
-            html = "<a id='validate' href='#' class='col12 button'>Validate</a>";
+            html = "<a id='validate' href='#' class='col12 button'>Validate</a><a id='download' href='#' class='col12 button'>Download in JOSM</a>";
         }
         if (e.features[0].properties.status === 'validate') {
-            html = "<a id='empty' href='#' class='col12 button'>Invalidate</a>";
+            html = "<a id='empty' href='#' class='col12 button'>Invalidate</a><a id='download' href='#' class='col12 button'>Download in JOSM</a>";
         }
         html = html + '</div>';
         if (!user) {
@@ -48,14 +52,20 @@ module.exports = function() {
         $('#empty').on('click', function(event) {
             save('empty', e.features[0])
         });
+        $('#download').on('click', function(event) {
+            downloadJOSM(e.features[0])
+        });
     })
 
-    function downloadJOSM(id) {
-        $.getJSON('http://localhost:8111/import?new_layer=true&url=https://s3.amazonaws.com/tofix/aa.osm');
+    function downloadJOSM(obj) {
+        var bbox = turf.bbox(obj);
+        $.getJSON('http://127.0.0.1:8111/load_and_zoom?left=' + bbox[0] + '&right=' + bbox[2] + '&top=' + bbox[3] + '&bottom=' + bbox[1]);
+        $.getJSON(config.urltofile + obj.properties.id+'.osm');
+        console.log(config.urltofile + obj.properties.id+'.osm');
     }
 
     function save(type, obj) {
-        firebase.database().ref(config.layerId + '/' + obj.properties.idgrid).set({
+        firebase.database().ref(config.layerId + '/' + obj.properties.id).set({
             status: type,
             user: user.display_name
         });
@@ -88,8 +98,8 @@ module.exports = function() {
         var centroids = turf.featureCollection([])
         for (var i = 0; i < data.features.length; i++) {
             data.features[i].properties.status = 'empty'
-            if (done[data.features[i].properties.idgrid]) {
-                data.features[i].properties = Object.assign(data.features[i].properties, done[data.features[i].properties.idgrid])
+            if (done[data.features[i].properties.id]) {
+                data.features[i].properties = Object.assign(data.features[i].properties, done[data.features[i].properties.id])
                 var cen = turf.centroid(data.features[i]);
                 cen.properties.user = data.features[i].properties.user
                 centroids.features.push(cen)
