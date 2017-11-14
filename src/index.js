@@ -12,7 +12,8 @@ module.exports = function () {
     container: 'map',
     style: config.style,
     zoom: 5,
-    center: [-75.927, -8.744]
+    center: [-75.927, -8.744],
+    hash: true
   })
 
   map.on('click', config.layerId, function (e) {
@@ -35,12 +36,11 @@ module.exports = function () {
       html = '<h5>You need to authenticate!!</h5>'
     }
     new mapboxgl.Popup()
-            .setLngLat(e.lngLat)
-            .setHTML(html)
-            .addTo(map)
+      .setLngLat(e.lngLat)
+      .setHTML(html)
+      .addTo(map)
     $('#progress').on('click', function (event) {
-      downloadJOSM(e.features[0])
-      save('progress', e.features[0])
+      downloadJOSM('progress', e.features[0])
     })
     $('#done').on('click', function (event) {
       save('done', e.features[0])
@@ -52,14 +52,26 @@ module.exports = function () {
       save('empty', e.features[0])
     })
     $('#download').on('click', function (event) {
-      downloadJOSM(e.features[0])
+      downloadJOSM(null, e.features[0])
     })
   })
 
-  function downloadJOSM (obj) {
+  function downloadJOSM (type, obj) {
     var bbox = turf.bbox(obj)
-    $.getJSON(config.josmLocalServer + 'load_and_zoom?left=' + bbox[0] + '&right=' + bbox[2] + '&top=' + bbox[3] + '&bottom=' + bbox[1])
-    $.getJSON(config.urltofile + obj.properties.id + '.osm')
+    $.ajax({
+      url: config.josmLocalServer + 'load_and_zoom?left=' + bbox[0] + '&right=' + bbox[2] + '&top=' + bbox[3] + '&bottom=' + bbox[1],
+      complete: function (t) {
+        if (t.status !== 200) {
+          alert('JOSM remote control did not respond, Do you have JOSM running?,  is it your JOSM is running in https')
+        } else {
+          window.open(config.urltofile + obj.properties.id + '.osm')
+          if (type === 'progress') {
+            save(type, obj)
+          }
+        }
+      }
+    })
+    // $.get(config.urltofile + obj.properties.id + '.osm')
     console.log(config.urltofile + obj.properties.id + '.osm')
   }
 
@@ -69,10 +81,6 @@ module.exports = function () {
       user: user.display_name
     })
   }
-
-  $(document).ready(function () {
-    getFeatures()
-  })
 
   function getFeatures () {
     firebase.database().ref(config.layerId).on('value', function (snapshot) {
@@ -121,10 +129,10 @@ module.exports = function () {
             property: 'status',
             type: 'categorical',
             stops: [
-                            ['empty', '#51503f'],
-                            ['progress', '#eaa8a8'],
-                            ['done', '#ffd400'],
-                            ['validate', '#2de561']
+              ['empty', '#51503f'],
+              ['progress', '#eaa8a8'],
+              ['done', '#f4f0a1'],
+              ['validate', '#8ef9be']
             ]
           },
           'fill-opacity': 0.4
@@ -143,10 +151,10 @@ module.exports = function () {
             type: 'categorical',
             property: 'status',
             stops: [
-                            ['empty', '#51503f'],
-                            ['progress', '#eaa8a8'],
-                            ['done', '#ffd400'],
-                            ['validate', '#2de561']
+              ['empty', '#51503f'],
+              ['progress', '#eaa8a8'],
+              ['done', '#ffd400'],
+              ['validate', '#2de561']
             ]
           }
         }
@@ -171,4 +179,7 @@ module.exports = function () {
       })
     }
   }
+  $(document).ready(function () {
+    getFeatures()
+  })
 }

@@ -16,6 +16,6 @@ module.exports = {
     oauth_secret: '4SCVioq68iyaGueWNOleaCYPIfRvdGoQWe4cnPZF',
     auto: true
   },
-  urltofile: 'http://localhost:8111/import?new_layer=true&url=https://s3.amazonaws.com/tofix/peruSchools/',
+  urltofile: 'http://127.0.0.1:8111/import?new_layer=true&url=https://s3.amazonaws.com/tofix/peruSchools/',
   josmLocalServer: 'http://127.0.0.1:8111/'
 }
