@@ -32,7 +32,7 @@ module.exports = {
       minify: {
         collapseWhitespace: true
       },
-      hash: true,
+      // hash: true,
       excludeChunks: ['land'],
       template: '!!ejs-compiled-loader!src/views/index.ejs'
     }),
@@ -41,7 +41,7 @@ module.exports = {
       minify: {
         collapseWhitespace: true
       },
-      hash: true,
+      // hash: true,
       filename: 'land.html',
       template: '!!ejs-compiled-loader!src/views/land.ejs',
       inject: false
