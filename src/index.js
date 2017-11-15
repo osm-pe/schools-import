@@ -71,7 +71,7 @@ module.exports = function () {
         }
       }
     })
-    // $.get(config.urltofile + obj.properties.id + '.osm')
+      // $.get(config.urltofile + obj.properties.id + '.osm')
     console.log(config.urltofile + obj.properties.id + '.osm')
   }
 
@@ -97,6 +97,7 @@ module.exports = function () {
       $.getJSON(config.gist, function (data) {
         gridData = data
         print(done, gridData)
+        $('#map').removeClass('loading')
       })
     }
   }
