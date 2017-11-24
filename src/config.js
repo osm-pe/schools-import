@@ -9,7 +9,10 @@ module.exports = {
   },
   accessToken: 'pk.eyJ1Ijoib3NtcGVydSIsImEiOiJjajEzcGp4ZGIwMXZlMnFsam9neWsxbTZuIn0.SLaQDD84yMuzjCp7YXTSog',
   style: 'mapbox://styles/mapbox/streets-v9',
-  gist: 'https://gist.githubusercontent.com/Rub21/1ce39941c30d270eb8a8e5c8349a7bec/raw/34e54bcf35fae03701162f21a2d59bb9405dc77f/peru-grid-schools.geojson',
+  gist: {
+    Peru: 'https://gist.githubusercontent.com/Rub21/1ce39941c30d270eb8a8e5c8349a7bec/raw/34e54bcf35fae03701162f21a2d59bb9405dc77f/peru-grid-schools.geojson',
+    Callao: 'https://gist.githubusercontent.com/anonymous/d9894bc6c84b4c52195234f5ba83a172/raw/0b1dcfef1b885c679583696e0ab913225f703372/Callao-grid.geojson'
+  },
   layerId: 'school',
   osmAuth: {
     oauth_consumer_key: '7tdO9K1lqrYdWfgYQCL8yGxmo2NKPbXZhIURCiZk',

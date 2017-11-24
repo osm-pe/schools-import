@@ -1,10 +1,11 @@
 var config = require('./config')
 var login = require('./login')
 var user = null
-login(function (u) {
+var state='Peru';
+login(function(u) {
   user = u
 })
-module.exports = function () {
+module.exports = function() {
   var gridData = null
   firebase.initializeApp(config.fconfig)
   mapboxgl.accessToken = config.accessToken
@@ -16,7 +17,7 @@ module.exports = function () {
     hash: true
   })
 
-  map.on('click', config.layerId, function (e) {
+  map.on('click', config.layerId, function(e) {
     var html = "<div class='pill'> <a id='progress' href='#' class='col12 button'>Start Mapping in JOSM</a>"
 
     if (e.features[0].properties.status === 'progress' && user.display_name === e.features[0].properties.user) {
@@ -39,62 +40,62 @@ module.exports = function () {
       .setLngLat(e.lngLat)
       .setHTML(html)
       .addTo(map)
-    $('#progress').on('click', function (event) {
+    $('#progress').on('click', function(event) {
       downloadJOSM('progress', e.features[0])
     })
-    $('#done').on('click', function (event) {
+    $('#done').on('click', function(event) {
       save('done', e.features[0])
     })
-    $('#validate').on('click', function (event) {
+    $('#validate').on('click', function(event) {
       save('validate', e.features[0])
     })
-    $('#empty').on('click', function (event) {
+    $('#empty').on('click', function(event) {
       save('empty', e.features[0])
     })
-    $('#download').on('click', function (event) {
+    $('#download').on('click', function(event) {
       downloadJOSM(null, e.features[0])
     })
   })
 
-  function downloadJOSM (type, obj) {
+  function downloadJOSM(type, obj) {
     var bbox = turf.bbox(obj)
     $.ajax({
-      url: config.josmLocalServer + 'load_and_zoom?left=' + bbox[0] + '&right=' + bbox[2] + '&top=' + bbox[3] + '&bottom=' + bbox[1],
-      complete: function (t) {
-        if (t.status !== 200) {
-          alert('JOSM remote control did not respond, Do you have JOSM running?,  is it your JOSM is running in https')
-        } else {
-          window.open(config.urltofile + obj.properties.id + '.osm')
-          if (type === 'progress') {
-            save(type, obj)
+        url: config.josmLocalServer + 'load_and_zoom?left=' + bbox[0] + '&right=' + bbox[2] + '&top=' + bbox[3] + '&bottom=' + bbox[1],
+        complete: function(t) {
+          if (t.status !== 200) {
+            alert('JOSM remote control did not respond, Do you have JOSM running?,  is it your JOSM is running in https')
+          } else {
+            window.open(config.urltofile + obj.properties.id + '.osm')
+            if (type === 'progress') {
+              save(type, obj)
+            }
           }
         }
-      }
-    })
+      })
       // $.get(config.urltofile + obj.properties.id + '.osm')
     console.log(config.urltofile + obj.properties.id + '.osm')
   }
 
-  function save (type, obj) {
+  function save(type, obj) {
     firebase.database().ref(config.layerId + '/' + obj.properties.id).set({
       status: type,
       user: user.display_name
     })
   }
 
-  function getFeatures () {
-    firebase.database().ref(config.layerId).on('value', function (snapshot) {
+  function getFeatures() {
+    firebase.database().ref(config.layerId).on('value', function(snapshot) {
       loadGist(snapshot.val() || {})
-    }, function (errorObject) {
+    }, function(errorObject) {
       console.log('The read failed: ' + errorObject.code)
     })
   }
 
-  function loadGist (done) {
+  function loadGist(done) {
     if (gridData) {
       print(done, gridData)
     } else {
-      $.getJSON(config.gist, function (data) {
+      $.getJSON(config.gist[state], function(data) {
         gridData = data
         print(done, gridData)
         $('#map').removeClass('loading')
@@ -102,7 +103,8 @@ module.exports = function () {
     }
   }
 
-  function print (done, data) {
+  function print(done, data) {
+    console.log(data);
     var centroids = turf.featureCollection([])
     for (var i = 0; i < data.features.length; i++) {
       data.features[i].properties.status = 'empty'
@@ -180,7 +182,14 @@ module.exports = function () {
       })
     }
   }
-  $(document).ready(function () {
+  $(document).ready(function() {
     getFeatures()
+
+    $("#layer").change(function() {
+      gridData = null;
+      state = $(this).val();
+      getFeatures();
+      // alert('Selected value: ' + $(this).val());
+    });
   })
 }
