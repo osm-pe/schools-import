@@ -28,7 +28,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'OSM tasking import',
+      title: 'OSM tasking import - Perú',
       minify: {
         collapseWhitespace: true
       },

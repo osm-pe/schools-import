@@ -1,7 +1,7 @@
 var config = require('./config')
 var login = require('./login')
 var user = null
-var state='Peru';
+var state='Educacion';
 login(function(u) {
   user = u
 })
