@@ -10,7 +10,7 @@ module.exports = {
   accessToken: 'pk.eyJ1Ijoib3NtcGVydSIsImEiOiJjajEzcGp4ZGIwMXZlMnFsam9neWsxbTZuIn0.SLaQDD84yMuzjCp7YXTSog',
   style: 'mapbox://styles/mapbox/streets-v9',
   gist: {
-    Educacion: 'https://gist.githubusercontent.com/Rub21/0f4cfa790ec186b00409d48df3c76450/raw/4db3cde9c784d870954879f463af35c4f433d0bf/peru-grid-schools.geojson'
+    Educacion: 'https://gist.githubusercontent.com/Rub21/3b8e6b02bcf6fddec70ee00d1c89f2de/raw/eeb90bb5086b456c95d4ee8ec9bf416f7d8d7d9c/peru-grid-schools.geojson'
   },
   layerId: 'school',
   osmAuth: {
@@ -18,6 +18,6 @@ module.exports = {
     oauth_secret: '4SCVioq68iyaGueWNOleaCYPIfRvdGoQWe4cnPZF',
     auto: true
   },
-  urltofile: 'http://127.0.0.1:8111/import?new_layer=true&url=https://s3.amazonaws.com/tofix/peruSchools/',
+  urltofile: 'http://127.0.0.1:8111/import?new_layer=true&url=https://s3.amazonaws.com/tofix/peruimport/schools/',
   josmLocalServer: 'http://127.0.0.1:8111/'
 }
