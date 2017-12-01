@@ -7,8 +7,7 @@ module.exports = {
     storageBucket: '',
     messagingSenderId: '56359557755'
   },
-  accessToken:
-    'pk.eyJ1Ijoib3NtcGVydSIsImEiOiJjajEzcGp4ZGIwMXZlMnFsam9neWsxbTZuIn0.SLaQDD84yMuzjCp7YXTSog',
+  accessToken: 'pk.eyJ1Ijoib3NtcGVydSIsImEiOiJjajEzcGp4ZGIwMXZlMnFsam9neWsxbTZuIn0.SLaQDD84yMuzjCp7YXTSog',
   style: 'mapbox://styles/mapbox/streets-v9',
   gist: {
     Educacion:
@@ -20,7 +19,6 @@ module.exports = {
     oauth_secret: '4SCVioq68iyaGueWNOleaCYPIfRvdGoQWe4cnPZF',
     auto: true
   },
-  urltofile:
-    'http://127.0.0.1:8111/import?new_layer=true&url=https://s3.amazonaws.com/tofix/peruimport/schools/',
+  urltofile: 'http://127.0.0.1:8111/import?new_layer=true&url=https://s3.amazonaws.com/tofix/peruimport/schools/',
   josmLocalServer: 'http://127.0.0.1:8111/'
 };

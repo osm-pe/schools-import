@@ -18,32 +18,36 @@ module.exports = function() {
   });
 
   map.on('click', config.layerId, function(e) {
-    var html =
-      "<div class='pill'> <a id='progress' href='#' class='col12 button'>Start Mapping in JOSM</a>";
-
-    if (
-      e.features[0].properties.status === 'progress' &&
-      user.display_name === e.features[0].properties.user
-    ) {
-      html =
-        "<a id='done' href='#' class='col12 button'>Mark task as done</a><a id='download' href='#' class='col12 button'>Download in JOSM</a>";
+    var html = "<div class='pill'> <a id='progress' href='#' class='col12 button'>Start Mapping in JOSM</a>";
+    if (e.features[0].properties.status === 'progress' && user.display_name === e.features[0].properties.user) {
+      html = "<a id='done' href='#' class='col12 button'>Mark task as done</a>";
+      html = html + "<a id='download' href='#' class='col12 button'>Download in JOSM</a>";
     }
-    if (
-      e.features[0].properties.status === 'progress' &&
-      user.display_name !== e.features[0].properties.user
-    ) {
+    if (e.features[0].properties.status === 'progress' && user.display_name !== e.features[0].properties.user) {
       html =
-        '<div>The block was taken  by ' +
+        '<div>The block was taken by ' +
         e.features[0].properties.user +
+        ', ' +
+        markedAt(e.features[0].properties.date) +
         '</div>';
+      html = html + "<a id='empty' href='#' class='col12 button'>Unblock</a>";
     }
     if (e.features[0].properties.status === 'done') {
       html =
-        "<a id='validate' href='#' class='col12 button'>Validate</a><a id='download' href='#' class='col12 button'>Download in JOSM</a>";
+        '<div>Marked as done by ' +
+        e.features[0].properties.user +
+        ', ' +
+        markedAt(e.features[0].properties.date) +
+        '</div>';
+      html = html + "<a id='validate' href='#' class='col12 button'>Validate</a>";
+      html = html + "<a id='empty' href='#' class='col12 button'>Invalidate</a>";
+      html = html + "<a id='download' href='#' class='col12 button'>Download in JOSM</a>";
     }
     if (e.features[0].properties.status === 'validate') {
       html =
-        "<a id='empty' href='#' class='col12 button'>Invalidate</a><a id='download' href='#' class='col12 button'>Download in JOSM</a>";
+        '<div>Validate by ' + e.features[0].properties.user + ', ' + markedAt(e.features[0].properties.date) + '</div>';
+      html = "<a id='empty' href='#' class='col12 button'>Invalidate</a>";
+      html = html + "<a id='download' href='#' class='col12 button'>Download in JOSM</a>";
     }
     html = html + '</div>';
     if (!user) {
@@ -55,18 +59,23 @@ module.exports = function() {
       .addTo(map);
     $('#progress').on('click', function(event) {
       downloadJOSM('progress', e.features[0]);
+      event.stopPropagation();
     });
     $('#done').on('click', function(event) {
       save('done', e.features[0]);
+      event.stopPropagation();
     });
     $('#validate').on('click', function(event) {
       save('validate', e.features[0]);
+      event.stopPropagation();
     });
     $('#empty').on('click', function(event) {
       save('empty', e.features[0]);
+      event.stopPropagation();
     });
     $('#download').on('click', function(event) {
       downloadJOSM(null, e.features[0]);
+      event.stopPropagation();
     });
   });
 
@@ -85,9 +94,7 @@ module.exports = function() {
         bbox[1],
       complete: function(t) {
         if (t.status !== 200) {
-          alert(
-            'JOSM remote control did not respond, Do you have JOSM running?,  is it your JOSM is running in https'
-          );
+          alert('JOSM remote control did not respond, Do you have JOSM running?,  is it your JOSM is running in https');
         } else {
           window.open(config.urltofile + obj.properties.id + '.osm');
           if (type === 'progress') {
@@ -105,7 +112,8 @@ module.exports = function() {
       .ref(config.layerId + '/' + obj.properties.id)
       .set({
         status: type,
-        user: user.display_name
+        user: user.display_name,
+        date: Date()
       });
   }
 
@@ -141,10 +149,7 @@ module.exports = function() {
     for (var i = 0; i < data.features.length; i++) {
       data.features[i].properties.status = 'empty';
       if (done[data.features[i].properties.id]) {
-        data.features[i].properties = Object.assign(
-          data.features[i].properties,
-          done[data.features[i].properties.id]
-        );
+        data.features[i].properties = Object.assign(data.features[i].properties, done[data.features[i].properties.id]);
         var cen = turf.centroid(data.features[i]);
         cen.properties.user = data.features[i].properties.user;
         centroids.features.push(cen);
@@ -166,12 +171,7 @@ module.exports = function() {
           'fill-color': {
             property: 'status',
             type: 'categorical',
-            stops: [
-              ['empty', '#51503f'],
-              ['progress', '#eaa8a8'],
-              ['done', '#f4f0a1'],
-              ['validate', '#8ef9be']
-            ]
+            stops: [['empty', '#51503f'], ['progress', '#eaa8a8'], ['done', '#f4f0a1'], ['validate', '#8ef9be']]
           },
           'fill-opacity': 0.4
         }
@@ -188,12 +188,7 @@ module.exports = function() {
           'line-color': {
             type: 'categorical',
             property: 'status',
-            stops: [
-              ['empty', '#51503f'],
-              ['progress', '#eaa8a8'],
-              ['done', '#ffd400'],
-              ['validate', '#2de561']
-            ]
+            stops: [['empty', '#51503f'], ['progress', '#eaa8a8'], ['done', '#ffd400'], ['validate', '#2de561']]
           }
         }
       });
@@ -228,3 +223,27 @@ module.exports = function() {
     });
   });
 };
+
+function markedAt(date) {
+  if (!date) {
+    date = new Date(Date.now() - 3 * 12 * 3600 * 1000);
+  }
+  date_marked = new Date(date);
+  date_now = new Date();
+  seconds = Math.floor((date_now - date_marked) / 1000);
+  minutes = Math.floor(seconds / 60);
+  hours = Math.floor(minutes / 60);
+  days = Math.floor(hours / 24);
+  hours = hours - days * 24;
+  minutes = minutes - days * 24 * 60 - hours * 60;
+  seconds = seconds - days * 24 * 60 * 60 - hours * 60 * 60 - minutes * 60;
+  if (hours > 24) {
+    return hours / 24 + 'd ago';
+  } else if (hours > 0) {
+    return hours + 'h ago';
+  } else if (minutes > 0 && minutes < 60) {
+    return minutes + 'min ago';
+  } else {
+    return seconds + 's ago';
+  }
+}
