@@ -21,6 +21,7 @@ module.exports = function() {
     var html = "<div class='pill'> <a id='progress' href='#' class='col12 button'>Start Mapping in JOSM</a>";
     if (e.features[0].properties.status === 'progress' && user.display_name === e.features[0].properties.user) {
       html = "<a id='done' href='#' class='col12 button'>Mark task as done</a>";
+      html = html + "<a id='empty' href='#' class='col12 button'>Unblock</a>";
       html = html + "<a id='download' href='#' class='col12 button'>Download in JOSM</a>";
     }
     if (e.features[0].properties.status === 'progress' && user.display_name !== e.features[0].properties.user) {
@@ -30,7 +31,9 @@ module.exports = function() {
         ', ' +
         markedAt(e.features[0].properties.date) +
         '</div>';
-      html = html + "<a id='empty' href='#' class='col12 button'>Unblock</a>";
+      if (unblock(e.features[0].properties.date)) {
+        html = html + "<a id='empty' href='#' class='col12 button'>Unblock</a>";
+      }
     }
     if (e.features[0].properties.status === 'done') {
       html =
@@ -246,4 +249,19 @@ function markedAt(date) {
   } else {
     return seconds + 's ago';
   }
+}
+
+function unblock(date) {
+  if (!date) {
+    date = new Date(Date.now() - 3 * 12 * 3600 * 1000);
+  }
+  date_marked = new Date(date);
+  date_now = new Date();
+  seconds = Math.floor((date_now - date_marked) / 1000);
+  minutes = Math.floor(seconds / 60);
+  hours = Math.floor(minutes / 60);
+  if (hours > 1) {
+    return true;
+  }
+  return false;
 }
