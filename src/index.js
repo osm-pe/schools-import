@@ -160,6 +160,7 @@ module.exports = function() {
     }
     if (map.getSource(config.layerId)) {
       map.getSource(config.layerId).setData(data);
+      console.log(JSON.stringify(data))
       map.getSource('line').setData(data);
       map.getSource('label').setData(centroids);
     } else {
