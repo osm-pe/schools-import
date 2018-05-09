@@ -1,8 +1,11 @@
-# -*- coding: utf-8 -*-
+# encoding=utf8
 #!/usr/bin/python
 import sys
 import string
 from lxml import etree
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 osmfilename = sys.argv[1] if (len(sys.argv) > 1) else sys.exit("Invalid file name")
 tree = etree.parse(osmfilename)
 iscedLevels = tree.findall(".//tag[@k='isced:level']");
@@ -13,10 +16,13 @@ def rigthTags( arr ):
   if arr[0]=='primary':
     fixisced.append('1')
     fixisced.append('2')
-  else:
+    return ';'.join(fixisced)
+  elif arr[0]=='secondary':
     fixisced.append('2')
     fixisced.append('1')
-  return ';'.join(fixisced)
+    return ';'.join(fixisced)
+  return ';'.join(arr)
+  
 
 def fixIsCedLevel( iscedLevel ):
   iscedLevel=iscedLevel.replace(" ", "").lower()
