@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/python
 import sys
 import string
@@ -29,6 +30,8 @@ def fixIsCedLevel( iscedLevel ):
     iscedLevel='1'
   elif iscedLevel=='secondary':
     iscedLevel='2'
+  elif iscedLevel=='básicaespecial-inicial':
+    iscedLevel='0'
   return iscedLevel
 
 for iscedLevel in iscedLevels:
