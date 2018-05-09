@@ -7,7 +7,7 @@ tree = etree.parse(osmfilename)
 refs = tree.findall(".//tag[@k='ref']");
 modify=False
 def fillRef( refs ):
-  refs = refs.split(';')
+  refs = refs.replace(" ", "").split(';')
   for idx, item in enumerate(refs):
     if len(item)== 6:
       refs[idx] = "0"+item
