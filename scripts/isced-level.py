@@ -23,7 +23,6 @@ def rigthTags( arr ):
     return ';'.join(fixisced)
   return ';'.join(arr)
   
-
 def fixIsCedLevel( iscedLevel ):
   iscedLevel=iscedLevel.replace(" ", "").lower()
   a=iscedLevel.split(':')
@@ -51,6 +50,9 @@ for iscedLevel in iscedLevels:
       print old_iscedLevels +' => '+ new_iscedLevels
       iscedLevel.set("v", new_iscedLevels)
       modify=True;
+    if new_iscedLevels=='0':
+      amenity[0].set("v","kindergarten")
+    
   if modify == True :
     parent.attrib['action']='modify'
     modify = False
