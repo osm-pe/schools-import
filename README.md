@@ -3,6 +3,9 @@
 We created this app as a preparations for the OSMGeoWeek. Our idea is import Peru school opendata into OpenStreetMap, but without  a handler data tool  it would be difficult and messy.
 
 This app works similar to [tasking manager](https://github.com/hotosm/osm-tasking-manager2), the differences is that  you can setup each block to an url of data and download into JOSM to evaluate the data there, each block should have: `progress`, `done` and `validated` stage as the progress import is going. 
+
+![import2](https://user-images.githubusercontent.com/1152236/40888544-5ae823b6-671e-11e8-99dc-89b81f948909.gif)
+
 # Link of task 
 You can find this task in https://osm-pe.github.io/schools-import/#11.82/-13.1675/-74.2395
 # Import Schools in Peru
