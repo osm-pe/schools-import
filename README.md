@@ -11,7 +11,7 @@ You can find this task in https://osm-pe.github.io/schools-import/#11.82/-13.167
 # Import Schools in Peru
 
 This repo focuses on the Peru import schools.
-Right now we're importing  around 100, 000 schools in Peru 
+Right now we're importing  around 75, 000 schools in Peru 
 You can jump in and follow the guide and select an area to import today -- > https://osm-pe.github.io/schools-import/#11.82/-13.1675/-74.2395
 
 #### Why are we doing this?
